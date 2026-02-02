@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+/* Dashboard cards tweaks */
+.dashboard-card {
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 1rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.dashboard-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    color: #111; /* make titles dark for contrast on all bg */
+}
+
+.dashboard-card .card-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111; /* make numbers dark on all bg except dark card */
+}
+
+/* Specific fixes for bg-dark card */
+.dashboard-card.bg-dark .card-title,
+.dashboard-card.bg-dark .card-value {
+    color: #fff; /* white text for dark card */
+}
+
+/* Optional: subtle border to distinguish gray card from background */
+.dashboard-card.bg-secondary {
+    border: 1px solid rgba(0,0,0,0.15);
+}
+</style>
+{% endblock %}
+
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-light text-center">
+            <div class="card-body">
+                <div class="card-title">Total Employees</div>
+                <div class="card-value">{{ total_employees }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-secondary text-center">
+            <div class="card-body">
+                <div class="card-title">Present Today</div>
+                <div class="card-value">{{ present_today }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card dashboard-card bg-dark text-white text-center">
+            <div class="card-body">
+                <div class="card-title">Absent Today</div>
+                <div class="card-value">{{ absent_today }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

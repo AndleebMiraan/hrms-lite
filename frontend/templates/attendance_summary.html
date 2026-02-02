@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Attendance Summary{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg rounded border-gray-400">
+    <div class="card-header d-flex justify-content-between align-items-center border-bottom-gray-400">
+        <h3 class="mb-0 text-uppercase fw-bold flex-grow-1 text-center">Attendance Summary</h3>
+    </div>
+
+    <div class="card-body p-3">
+
+        <!-- Date Range Form -->
+        <form class="ajax-form row g-3 align-items-end" 
+              data-url="/api/attendance-summary" 
+              data-redirect="" 
+              data-error-message="Error fetching summary." 
+              novalidate>
+            {% csrf_token %}
+
+            <div class="col-md-4">
+                <label for="from_date" class="form-label">From Date</label>
+                <input type="text" class="form-control flatpickr" id="from_date" name="from_date"
+                       placeholder="Start Date" required
+                       value="{{ min_date }}"
+                       data-min-date="{{ min_date }}" data-max-date="{{ max_date }}">
+            </div>
+
+            <div class="col-md-4">
+                <label for="to_date" class="form-label">To Date</label>
+                <input type="text" class="form-control flatpickr" id="to_date" name="to_date"
+                       placeholder="End Date" required
+                       value="{{ max_date }}"
+                       data-min-date="{{ min_date }}" data-max-date="{{ max_date }}">
+            </div>
+
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-dark w-100">Fetch Summary</button>
+            </div>
+        </form>
+
+        <!-- Table -->
+        <div class="table-responsive mt-3">
+            <table class="table table-striped table-bordered" id="attendance-summary-table">
+                <thead>
+                    <tr>
+                        <th style="width:60px">S. No</th>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Total Present</th>
+                        <th>Total Absent</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" class="text-center">Loading summary...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(function () {
+
+    // Initialize Flatpickr with min/max from backend
+    $(".flatpickr").each(function() {
+        flatpickr(this, {
+            dateFormat: "Y-m-d",
+            minDate: $(this).data("min-date"),
+            maxDate: $(this).data("max-date")
+        });
+    });
+
+    // AJAX form submission
+    function fetchSummary() {
+        const formData = {
+            from_date: $("#from_date").val(),
+            to_date: $("#to_date").val(),
+        };
+
+        $.ajax({
+            url: "/api/attendance-summary",
+            type: "POST",
+            headers: { "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val() },
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            success: function(data) {
+                const tbody = $("#attendance-summary-table tbody");
+                tbody.empty();
+                if (!data.length) {
+                    tbody.append(`<tr><td colspan="4" class="text-center">No records found for this date range.</td></tr>`);
+                    return;
+                }
+                data.forEach((emp, idx) => {
+                    tbody.append(`
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td>${emp.employee_id}</td>
+                            <td>${emp.name}</td>
+                            <td>${emp.total_present}</td>
+                            <td>${emp.total_absent}</td>
+                            <td class="text-center">
+                                <a href="/attendance-summary-detail/${emp.id}/" 
+                                    class="btn btn-outline-dark btn-sm">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function(xhr) {
+                const msg = xhr.responseJSON ? JSON.stringify(xhr.responseJSON) : "Error fetching summary.";
+                alert(msg);
+            }
+        });
+    }
+
+    // Submit form via AJAX
+    $(document).on("submit", ".ajax-form", function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) {
+            alert("Please select both From and To dates.");
+            return;
+        }
+        fetchSummary();
+    });
+
+    // Automatically fetch summary after page load
+    if ($("#from_date").val() && $("#to_date").val()) {
+        fetchSummary();
+    }
+
+});
+</script>
+{% endblock %}

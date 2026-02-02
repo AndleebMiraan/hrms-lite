@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Employee{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg rounded border-gray-400">
+    <div class="card-header d-flex justify-content-between align-items-center border-bottom-gray-400">
+        <h3 class="mb-0 text-uppercase fw-bold flex-grow-1 text-center">Add Employee</h3>
+        <a href="{% url 'frontend:employees_list' %}" class="btn btn-dark d-flex align-items-center gap-2 px-2 py-1">
+            <i class="bi bi-arrow-left fs-5"></i>
+        </a>
+    </div>
+
+    <div class="card-body p-3">
+        <form class="ajax-form row g-3" data-url="/api/employee/" data-redirect="{% url 'frontend:employees_list' %}" data-error-message="Error submitting Employee." novalidate>
+            {% csrf_token %}
+
+            <div class="col-md-6">
+                <label for="employee_name" class="form-label">Employee Name</label>
+                <input type="text" class="form-control" id="employee_name" name="name" placeholder="Enter Employee Name" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="employee_id" class="form-label">Employee ID</label>
+                <input type="text" class="form-control" id="employee_id" name="employee_id" placeholder="Enter Employee ID" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="employee_email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="employee_email" name="email" placeholder="Enter Email" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="employee_department" class="form-label">Department</label>
+                <input type="text" class="form-control" id="employee_department" name="department" placeholder="Enter Department" required>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 mt-3">
+                <a href="{% url 'frontend:employees_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-dark">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
