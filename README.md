@@ -74,5 +74,5 @@ Open your browser and navigate to `http://127.0.0.1:8000/`
 [HRMS Lite on Render](https://hrms-lite-r31l.onrender.com/)
 
 ## GitHub Repository
-[HRMS Lite Source Code]([<YOUR_GITHUB_REPO_URL>](https://github.com/AndleebMiraan/hrms-lite.git))
+[HRMS Lite Source Code](https://github.com/AndleebMiraan/hrms-lite.git)
 
