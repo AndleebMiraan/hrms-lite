@@ -22,7 +22,7 @@ HRMS Lite is a lightweight Human Resource Management System designed to allow an
 ## Tech Stack
 - **Frontend:** HTML, CSS (Bootstrap, Choices.js, Flatpickr), JavaScript, jQuery
 - **Backend:** Python, Django
-- **Database:** SQLite (default Django DB)
+- **Database:** MySQL
 - **Deployment:** Render (Backend + Frontend)
 
 ## Steps to Run the Project Locally
