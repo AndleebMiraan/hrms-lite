@@ -44,14 +44,14 @@ venv\Scripts\activate     # Windows
 pip install -r requirements.txt
 ```
 
-4. **Run migrations**
+4. **Run makemigrations(packaging step)**
 ```bash
-python manage.py migrate
+python manage.py makemigrations
 ```
 
-5. **Create superuser (optional)**
+5. **Run migrations**
 ```bash
-python manage.py createsuperuser
+python manage.py migrate
 ```
 
 6. **Run the development server**
